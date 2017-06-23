@@ -50,6 +50,12 @@ CMy2048GameDoc::CMy2048GameDoc()
 
 CMy2048GameDoc::~CMy2048GameDoc()
 {
+	if (cell) {
+		for (int i = 0; i < size; i++)
+			delete[] cell[i];
+
+		delete cell;
+	}
 }
 
 BOOL CMy2048GameDoc::OnNewDocument()
@@ -63,7 +69,7 @@ BOOL CMy2048GameDoc::OnNewDocument()
 	for (int i = 0; i < size; i++) {
 		cell[i] = new int[size];
 		for (int j = 0; j < size; j++) {
-			cell[i][j] = floor(rand() % 2) * 2;
+			cell[i][j] = (int) (floor(rand() % 2) * 2);
 		}
 	}
 

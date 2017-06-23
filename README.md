@@ -6,7 +6,7 @@ Own 2048 game version created with MFC library.
 Used with Visual Studio 2015 
 
 # TODO
--Fix number generation algorithm
--Undo
--Different colors for different numbers
--Preview view
+* Fix number generation algorithm
+* Undo
+* Different colors for different numbers
+* Preview view

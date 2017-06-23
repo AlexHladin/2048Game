@@ -124,29 +124,17 @@ void CMy2048GameView::OnDraw(CDC* pDC)
 
 				if (pDoc->cell[i][j]) {
 					val.Format(L"%d", pDoc->cell[i][j]);
-					CSize dl = pDC->GetTextExtent(val);
-					pDC->TextOut((x + size / 2) - dl.cx / 2, (y + size / 2) - dl.cy / 2, val);
+					pDC->DrawTextW(val, valRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 				}
 
 				y += size;
 			}
 			x += size;
 		}
-
 		
 		pointsContainer->OnDraw(pDC);
 
 		pDC->SelectObject(font_st);
-		/*CString str;
-		pDC->SetBkColor(0);
-		if (pDoc->name.GetLength())
-			str.Format(L"%s points: %d", pDoc->name, pDoc->points);
-		else
-			str.Format(L"Points: %d", pDoc->points);
-
-		pDC->TextOut(pDoc->size * size, 10, str);
-
-		pDC->SelectObject(font_st);*/
 	}
 }
 
@@ -213,12 +201,6 @@ CMy2048GameDoc* CMy2048GameView::GetDocument() const // non-debug version is inl
 
 void CMy2048GameView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	/*
-	CString msg;
-	msg.Format(L"%d", nChar);
-	//AfxMessageBox(msg);
-	*/
-
 	CMy2048GameDoc* pDoc = GetDocument();
 	
 	if (!pDoc->start) return;
@@ -232,7 +214,6 @@ void CMy2048GameView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 					if (pDoc->cell[k][j] != 0) {
 						if (pDoc->cell[i][j] == 0) {
 							pDoc->cell[i][j] = pDoc->cell[k][j];
-							//pDoc->points += pDoc->cell[k][j];
 							pDoc->cell[k][j] = 0;
 						} else {
 							if (pDoc->cell[i][j] == pDoc->cell[k][j]) {

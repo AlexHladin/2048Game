@@ -26,13 +26,6 @@ StringContainer::~StringContainer()
 
 int StringContainer::GetWidth()
 {
-	/*LOGFONT lf1, lf2;
-	valueTextFont.GetLogFont(&lf1);
-	descriptionTextFont.GetLogFont(&lf2);
-
-	return  max(
-		2 * margin + lf1.lfWidth * valueText->GetLength(), 
-		2 * margin + lf2.lfWidth * descriptionText->GetLength());*/
 	return 0;
 }
 
@@ -45,7 +38,7 @@ int StringContainer::GetHeight()
 	return margin * 2 + abs(lf1.lfHeight) + abs(lf2.lfHeight);
 }
 
-void StringContainer::OnDraw(CDC * pDC)
+void StringContainer::OnDraw(CDC* pDC)
 {
 	CBrush brushBlue(RGB(188, 172, 157));
 	LOGFONT descriptionFont;
@@ -71,13 +64,11 @@ void StringContainer::OnDraw(CDC * pDC)
 		position->x + valueSize.cx + 2 * margin, GetHeight());
 	pDC->RoundRect(rect, CPoint(17, 17));
 
-	valueSize = pDC->GetTextExtent(valueText);
-	pDC->TextOutW(position->x + (rect.Width() - valueSize.cx) / 2, position->y + abs(descriptionFont.lfHeight) + margin, valueText);
+	pDC->DrawTextW(valueText, rect, DT_CENTER | DT_BOTTOM | DT_SINGLELINE);
 
 	//description
 	pDC->SelectObject(&descriptionTextFont);
-	CSize descriptionSize = pDC->GetTextExtent(*descriptionText);
-	pDC->TextOutW(position->x + (rect.Width() - descriptionSize.cx) / 2, position->y + margin, *descriptionText);
+	pDC->DrawTextW(*descriptionText, rect, DT_CENTER | DT_TOP | DT_SINGLELINE);
 
 	pDC->SetBkMode(oldBkMode);
 	pDC->SelectObject(oldPen);
