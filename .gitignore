@@ -1,0 +1,9 @@
+2048Game.VC.db
+2048Game.VC.VC.opendb
+2048Game/2048Game.vcxproj.filters
+2048Game/2048Game.vcxproj
+*.enc
+*.idb
+*.lastbuildstate
+*.tlog
+*.ipch

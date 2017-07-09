@@ -12,6 +12,9 @@
 #include "2048GameDoc.h"
 #include "SettingsDialog.h"
 
+#include <iostream>
+#include <set>
+
 #include <propkey.h>
 
 #ifdef _DEBUG
@@ -68,9 +71,30 @@ BOOL CMy2048GameDoc::OnNewDocument()
 	cell = new int*[size];
 	for (int i = 0; i < size; i++) {
 		cell[i] = new int[size];
-		for (int j = 0; j < size; j++) {
-			cell[i][j] = (int) (floor(rand() % 2) * 2);
-		}
+		for (int j = 0; j < size; j++)
+			cell[i][j] = 0;
+	}
+
+	int filledCount = rand() % (size * 2 - 1) + 2;
+	std::set<std::pair<int, int>> uniqElem;
+	std::set<std::pair<int, int>>::iterator it;
+
+	while (filledCount >= 0) {
+		int value = (rand() % 2 + 1) * 2;
+		std::pair<int, int> coord;
+
+		do {
+			coord.first = rand() % size;
+			coord.second = rand() % size;
+
+			it = uniqElem.find(coord);
+		} while (it != uniqElem.end());
+
+		cell[coord.first][coord.second] = value;
+
+		uniqElem.insert(coord);
+
+		filledCount--;
 	}
 
 	start = true;
