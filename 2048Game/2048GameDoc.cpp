@@ -195,8 +195,7 @@ void CMy2048GameDoc::OnSettingsFieldsettings()
 
 	CString str;
 	str.Format(L"%d", size);
-	//AfxMessageBox(str);
-	//AfxMessageBox(name
+
 	SetModifiedFlag();
 	OnNewDocument();
 	UpdateAllViews(0);
