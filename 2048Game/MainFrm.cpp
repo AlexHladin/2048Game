@@ -109,13 +109,6 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// Load menu item image (not placed on any standard toolbars):
 	CMFCToolBar::AddToolBarForImageCollection(IDR_MENU_IMAGES, theApp.m_bHiColorIcons ? IDB_MENU_IMAGES_24 : 0);
 
-	// create docking windows
-	if (!CreateDockingWindows())
-	{
-		TRACE0("Failed to create docking windows\n");
-		return -1;
-	}
-
 	CDockablePane* pTabbedBar = NULL;
 	
 	// set the visual manager and style based on persisted value
@@ -178,32 +171,6 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 	return TRUE;
 }
 
-BOOL CMainFrame::CreateDockingWindows()
-{
-	BOOL bNameValid;
-
-	// Create class view
-	CString strClassView;
-	bNameValid = strClassView.LoadString(IDS_CLASS_VIEW);
-	ASSERT(bNameValid);
-	
-	// Create file view
-	CString strFileView;
-	bNameValid = strFileView.LoadString(IDS_FILE_VIEW);
-	ASSERT(bNameValid);
-	
-	// Create output window
-	CString strOutputWnd;
-	bNameValid = strOutputWnd.LoadString(IDS_OUTPUT_WND);
-	ASSERT(bNameValid);
-	
-	// Create properties window
-	CString strPropertiesWnd;
-	bNameValid = strPropertiesWnd.LoadString(IDS_PROPERTIES_WND);
-	ASSERT(bNameValid);
-	
-	return TRUE;
-}
 
 // CMainFrame diagnostics
 

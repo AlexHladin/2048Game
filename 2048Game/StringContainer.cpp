@@ -1,13 +1,14 @@
 #include "stdafx.h"
 #include "StringContainer.h"
 
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#endif
 
 StringContainer::StringContainer(int msgId, int* value, CPoint* position)
 {
-	CString* str = new CString();
-	str->LoadString(msgId);
-
-	this->descriptionText = str;
+	this->descriptionText = new CString;
+	this->descriptionText->LoadString(msgId);
 	this->value = value;
 	this->position = position;
 

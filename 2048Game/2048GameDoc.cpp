@@ -49,6 +49,11 @@ CMy2048GameDoc::CMy2048GameDoc()
 	fontText.lfQuality = PROOF_QUALITY;
 	fontText.lfPitchAndFamily = VARIABLE_PITCH | FF_ROMAN;
 	wcscpy_s(fontText.lfFaceName, L"Times New Roman");
+
+	cell = nullptr;
+	points = 0;
+	size = 4;
+	bkColor = RGB(200, 50, 50);
 }
 
 CMy2048GameDoc::~CMy2048GameDoc()

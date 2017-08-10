@@ -18,12 +18,12 @@ protected: // create from serialization only
 public:
 	CString msg;
 	CString name;
-	int points = 0;
-	int size = 4;
-	int** cell = 0;
+	int points;
+	int size;
+	int** cell;
 
 	LOGFONT fontText;
-	COLORREF bkColor = RGB(200, 50, 50);
+	COLORREF bkColor;
 	bool start;
 
 // Operations

@@ -35,6 +35,7 @@ END_MESSAGE_MAP()
 
 CMy2048GameView::CMy2048GameView()
 {
+	pointsContainer = 0;
 }
 
 CMy2048GameView::~CMy2048GameView()
@@ -51,22 +52,13 @@ void CMy2048GameView::OnInitialUpdate()
 	pointsContainer = new StringContainer(IDS_POINTS, &GetDocument()->points, new CPoint(0, 0));
 }
 
-
-BOOL CMy2048GameView::PreCreateWindow(CREATESTRUCT& cs)
-{
-	// TODO: Modify the Window class or styles here by modifying
-	//  the CREATESTRUCT cs
-
-	return CView::PreCreateWindow(cs);
-}
-
 // CMy2048GameView drawing
 
 void CMy2048GameView::OnDraw(CDC* pDC)
 {
 	CMy2048GameDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
-	if (!pDoc && pDoc->cell)
+	if (!pDoc || !pDoc->cell || !pointsContainer)
 		return;
 
 	CRect rect;
@@ -138,32 +130,6 @@ void CMy2048GameView::OnDraw(CDC* pDC)
 	}
 }
 
-
-// CMy2048GameView printing
-
-
-void CMy2048GameView::OnFilePrintPreview()
-{
-#ifndef SHARED_HANDLERS
-	AFXPrintPreview(this);
-#endif
-}
-
-BOOL CMy2048GameView::OnPreparePrinting(CPrintInfo* pInfo)
-{
-	// default preparation
-	return DoPreparePrinting(pInfo);
-}
-
-void CMy2048GameView::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
-{
-	// TODO: add extra initialization before printing
-}
-
-void CMy2048GameView::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
-{
-	// TODO: add cleanup after printing
-}
 
 void CMy2048GameView::OnRButtonUp(UINT /* nFlags */, CPoint point)
 {
