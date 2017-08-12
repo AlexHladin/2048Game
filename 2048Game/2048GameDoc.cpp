@@ -53,7 +53,7 @@ CMy2048GameDoc::CMy2048GameDoc()
 	cell = nullptr;
 	points = 0;
 	size = 4;
-	bkColor = RGB(200, 50, 50);
+	bkColor = RGB(214, 205, 196);
 }
 
 CMy2048GameDoc::~CMy2048GameDoc()

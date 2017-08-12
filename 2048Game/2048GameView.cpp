@@ -27,7 +27,6 @@ BEGIN_MESSAGE_MAP(CMy2048GameView, CView)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CMy2048GameView::OnFilePrintPreview)
 	ON_WM_CONTEXTMENU()
-	ON_WM_RBUTTONUP()
 	ON_WM_KEYDOWN()
 END_MESSAGE_MAP()
 
@@ -64,7 +63,7 @@ void CMy2048GameView::OnDraw(CDC* pDC)
 	CRect rect;
 	GetClientRect(&rect);
 
-	float size = (min(rect.right, rect.bottom) - pointsContainer->GetHeight()) / pDoc->size;
+	float size = (min(rect.right, rect.bottom) - pointsContainer->GetHeight() - 10) / pDoc->size;
 
 	float x = 0, y = 0, offset = .05f * size;
 
@@ -104,22 +103,59 @@ void CMy2048GameView::OnDraw(CDC* pDC)
 
 		pDC->SelectObject(&font);
 
+		int oldBkMode, oldBkColor;
+		float startY = pointsContainer->GetHeight() + 2 * offset;
+
+		// draw background rect		
+		CBrush b(RGB(188, 176, 162));
+		CPen p;
+		p.CreatePen(PS_SOLID, 0, RGB(188, 176, 162));
+		CBrush* oldB = pDC->SelectObject(&b);
+		CPen* oldP = pDC->SelectObject(&p);
+
+		CRect bkRect(0, startY, size * pDoc->size, startY + size * pDoc->size);
+		pDC->RoundRect(bkRect, CPoint(10, 10));
+
+		pDC->SelectObject(oldB);
+		pDC->SelectObject(oldP);
+		//
+
 		for (int i = 0; i < pDoc->size; i++) {
-			y = pointsContainer->GetHeight();
+			y = startY;
 			for (int j = 0; j < pDoc->size; j++) {
 				valRect.left = x + offset;
 				valRect.top = y + offset;
 				valRect.right = x + size - offset;
 				valRect.bottom = y + size - offset;
 
-				pDC->FillRect(valRect, &brush);
+				int color = GetColorByNumber(pDoc->cell[i][j]);
+
+				CPen pen;
+				pen.CreatePen(PS_SOLID, 0, color);
+				CBrush brush(color);
+				CBrush* oldBrush = pDC->SelectObject(&brush);
+				CPen* oldPen = pDC->SelectObject(&pen);
+				int oldBkMode = pDC->SetBkMode(TRANSPARENT);
+				
+				pDC->RoundRect(valRect, CPoint(10, 10));
 
 				if (pDoc->cell[i][j]) {
+					int oldTextColor = 0;
+					if (pDoc->cell[i][j] < 8)
+						oldTextColor = pDC->SetTextColor(RGB(126, 117, 100));
+
 					val.Format(L"%d", pDoc->cell[i][j]);
 					pDC->DrawTextW(val, valRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+
+					if (oldTextColor)
+						pDC->SetTextColor(oldTextColor);
 				}
 
 				y += size;
+
+				pDC->SetBkMode(oldBkMode);
+				pDC->SelectObject(oldPen);
+				pDC->SelectObject(oldBrush);
 			}
 			x += size;
 		}
@@ -130,12 +166,6 @@ void CMy2048GameView::OnDraw(CDC* pDC)
 	}
 }
 
-
-void CMy2048GameView::OnRButtonUp(UINT /* nFlags */, CPoint point)
-{
-	ClientToScreen(&point);
-	OnContextMenu(this, point);
-}
 
 void CMy2048GameView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 {
@@ -206,7 +236,6 @@ void CMy2048GameView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 						if (pDoc->cell[j][i] == 0)
 						{
 							pDoc->cell[j][i] = pDoc->cell[j][k];
-							//pDoc->points += pDoc->cell[j][k];
 							pDoc->cell[j][k] = 0;
 						}
 						else
@@ -236,7 +265,6 @@ void CMy2048GameView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 						if (pDoc->cell[i][j] == 0)
 						{
 							pDoc->cell[i][j] = pDoc->cell[k][j];
-							//pDoc->points += pDoc->cell[k][j];
 							pDoc->cell[k][j] = 0;
 						}
 						else
@@ -264,7 +292,6 @@ void CMy2048GameView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 						if (pDoc->cell[j][i] == 0)
 						{
 							pDoc->cell[j][i] = pDoc->cell[j][k];
-							//pDoc->points += pDoc->cell[j][k];
 							pDoc->cell[j][k] = 0;
 						}
 						else

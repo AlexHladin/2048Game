@@ -5,12 +5,14 @@
 #define new DEBUG_NEW
 #endif
 
-StringContainer::StringContainer(int msgId, int* value, CPoint* position)
+StringContainer::StringContainer(int msgId, int* value, CPoint* position, int width, int height)
 {
 	this->descriptionText = new CString;
 	this->descriptionText->LoadString(msgId);
 	this->value = value;
 	this->position = position;
+	this->width = width;
+	this->height = height;
 
 	descriptionTextFont.CreatePointFont(200, L"Times New Roman");
 	valueTextFont.CreatePointFont(300, L"Times New Roman");
