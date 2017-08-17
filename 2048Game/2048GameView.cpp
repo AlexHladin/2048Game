@@ -78,23 +78,12 @@ void CMy2048GameView::OnDraw(CDC* pDC)
 	CString val;
 
 	if (pDoc->start && pDoc->cell) {
-		while (true) {
-			int i = rand() % pDoc->size;
-			int j = rand() % pDoc->size;
-			val.Format(L"(%d, %d)", i, j);
-
-			if (pDoc->cell[i][j] == 0) {
-				pDoc->cell[i][j] = (rand() % 2) * 2;
-				break;
-			}
-		}
-	}
-	else {
-		if (pDoc->cell)
+		if (!pDoc->GetFreeCellsCount()) {
+			pDoc->start = FALSE;
 			AfxMessageBox(IDS_LOSE);
-	}
+			return;
+		}
 
-	if (pDoc->cell) {
 		font_st = pDC->SelectObject(&font);
 
 		font.CreateFontIndirect(&pDoc->fontText);
@@ -201,8 +190,6 @@ void CMy2048GameView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	
 	if (!pDoc->start) return;
 
-	int plus = 0;
-	int score = 0;
 	if (nChar == 37) {
 		for (int j = 0; j < pDoc->size; j++) {
 			for (int i = 0; i < pDoc->size; i++) {
@@ -310,6 +297,7 @@ void CMy2048GameView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		}
 	}
 
+	pDoc->GenerateNewRandomCell();
 	Invalidate();
 
 	CView::OnKeyDown(nChar, nRepCnt, nFlags);

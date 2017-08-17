@@ -12,9 +12,6 @@
 #include "2048GameDoc.h"
 #include "SettingsDialog.h"
 
-#include <iostream>
-#include <set>
-
 #include <propkey.h>
 
 #ifdef _DEBUG
@@ -62,7 +59,7 @@ CMy2048GameDoc::~CMy2048GameDoc()
 		for (int i = 0; i < size; i++)
 			delete[] cell[i];
 
-		delete cell;
+		delete[] cell;
 	}
 }
 
@@ -107,19 +104,6 @@ BOOL CMy2048GameDoc::OnNewDocument()
 	return TRUE;
 }
 
-// CMy2048GameDoc serialization
-
-void CMy2048GameDoc::Serialize(CArchive& ar)
-{
-	if (ar.IsStoring())
-	{
-		// TODO: add storing code here
-	}
-	else
-	{
-		// TODO: add loading code here
-	}
-}
 
 #ifdef SHARED_HANDLERS
 
@@ -198,9 +182,6 @@ void CMy2048GameDoc::OnSettingsFieldsettings()
 	SettingsDialog settings(&size, &name);
 	if (settings.DoModal() != IDOK) return;
 
-	CString str;
-	str.Format(L"%d", size);
-
 	SetModifiedFlag();
 	OnNewDocument();
 	UpdateAllViews(0);
@@ -239,4 +220,37 @@ BOOL CMy2048GameDoc::OnSaveDocument(LPCTSTR lpszPathName)
 	writer.Close();
 
 	return CDocument::OnSaveDocument(lpszPathName);
+}
+
+
+void CMy2048GameDoc::GenerateNewRandomCell()
+{
+	if (cell == nullptr) return;
+
+	std::vector<std::pair<int, int>> freeCells;
+
+	// get free cells
+	GetFreeCells(freeCells);
+	
+	// fill random cell
+	std::pair<int, int> randCoord = freeCells[rand() % freeCells.size()];
+	cell[randCoord.first][randCoord.second] = (rand() % 2 + 1) * 2;
+}
+
+
+// Function that fill std::vector elements with std::pair that contain coord of free cells
+void CMy2048GameDoc::GetFreeCells(std::vector<std::pair<int, int>>& in)
+{
+	for (int i = 0; i < size; i++)
+		for (int j = 0; j < size; j++)
+			if (!cell[i][j]) in.push_back(std::pair<int, int>(i, j));
+}
+
+
+int CMy2048GameDoc::GetFreeCellsCount()
+{
+	std::vector<std::pair<int, int>> freeCells;
+	GetFreeCells(freeCells);
+
+	return freeCells.size();
 }

@@ -5,6 +5,9 @@
 #include <stdlib.h>
 #include <time.h>
 #include <propkey.h>
+#include <iostream>
+#include <set>
+#include <vector>
 
 #pragma once
 
@@ -32,7 +35,7 @@ public:
 // Overrides
 public:
 	virtual BOOL OnNewDocument();
-	virtual void Serialize(CArchive& ar);
+//	virtual void Serialize(CArchive& ar);
 #ifdef SHARED_HANDLERS
 	virtual void InitializeSearchContent();
 	virtual void OnDrawThumbnail(CDC& dc, LPRECT lprcBounds);
@@ -60,4 +63,7 @@ public:
 	afx_msg void OnSettingsFieldsettings();
 	afx_msg void OnSettingsBackgroundcolor();
 	virtual BOOL OnSaveDocument(LPCTSTR lpszPathName);
+	void GenerateNewRandomCell();
+	void GetFreeCells(std::vector<std::pair<int, int>>& in);
+	int GetFreeCellsCount();
 };
