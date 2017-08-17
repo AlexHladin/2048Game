@@ -3,10 +3,6 @@
 //
 
 #pragma once
-#include "FileView.h"
-#include "ClassView.h"
-#include "OutputWnd.h"
-#include "PropertiesWnd.h"
 
 class CMainFrame : public CFrameWndEx
 {

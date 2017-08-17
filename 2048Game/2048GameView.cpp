@@ -190,16 +190,21 @@ void CMy2048GameView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	
 	if (!pDoc->start) return;
 
+	int numMoves = 0;
 	if (nChar == 37) {
 		for (int j = 0; j < pDoc->size; j++) {
 			for (int i = 0; i < pDoc->size; i++) {
 				for (int k = i + 1; k < pDoc->size; k++) {
-					if (pDoc->cell[k][j] != 0) {
+					if (pDoc->cell[k][j] != 0) {						
 						if (pDoc->cell[i][j] == 0) {
+							numMoves++;
+
 							pDoc->cell[i][j] = pDoc->cell[k][j];
 							pDoc->cell[k][j] = 0;
 						} else {
 							if (pDoc->cell[i][j] == pDoc->cell[k][j]) {
+								numMoves++;
+
 								pDoc->cell[i][j] += pDoc->cell[k][j];
 								pDoc->points += pDoc->cell[i][j];
 								pDoc->cell[k][j] = 0;
@@ -212,23 +217,19 @@ void CMy2048GameView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		}
 	}
 	else if (nChar == 38) {
-		for (int j = 0; j < pDoc->size; j++)
-		{
-			for (int i = 0; i < pDoc->size; i++)
-			{
-				for (int k = i + 1; k < pDoc->size; k++)
-				{
-					if (pDoc->cell[j][k] != 0)
-					{
-						if (pDoc->cell[j][i] == 0)
-						{
+		for (int j = 0; j < pDoc->size; j++) {
+			for (int i = 0; i < pDoc->size; i++) {
+				for (int k = i + 1; k < pDoc->size; k++) {
+					if (pDoc->cell[j][k] != 0) {
+						if (pDoc->cell[j][i] == 0) {
+							numMoves++;
+
 							pDoc->cell[j][i] = pDoc->cell[j][k];
 							pDoc->cell[j][k] = 0;
-						}
-						else
-						{
-							if (pDoc->cell[j][i] == pDoc->cell[j][k])
-							{
+						} else { 
+							if (pDoc->cell[j][i] == pDoc->cell[j][k]) {
+								numMoves++;
+
 								pDoc->cell[j][i] += pDoc->cell[j][k];
 								pDoc->points += pDoc->cell[j][i];
 								pDoc->cell[j][k] = 0;
@@ -239,25 +240,20 @@ void CMy2048GameView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 				}
 			}
 		}
-	}
-	else if (nChar == 39) {
-		for (int j = pDoc->size - 1; j >= 0; j--)
-		{
-			for (int i = pDoc->size - 1; i >= 0; i--)
-			{
-				for (int k = i - 1; k >= 0; k--)
-				{
-					if (pDoc->cell[k][j] != 0)
-					{
-						if (pDoc->cell[i][j] == 0)
-						{
+	} else if (nChar == 39) {
+		for (int j = pDoc->size - 1; j >= 0; j--) {
+			for (int i = pDoc->size - 1; i >= 0; i--) {
+				for (int k = i - 1; k >= 0; k--) {
+					if (pDoc->cell[k][j] != 0) {
+						if (pDoc->cell[i][j] == 0) {
+							numMoves++;
+
 							pDoc->cell[i][j] = pDoc->cell[k][j];
 							pDoc->cell[k][j] = 0;
-						}
-						else
-						{
-							if (pDoc->cell[i][j] == pDoc->cell[k][j])
-							{
+						} else {
+							if (pDoc->cell[i][j] == pDoc->cell[k][j]) {
+								numMoves++;
+
 								pDoc->cell[i][j] += pDoc->cell[k][j];
 								pDoc->points += pDoc->cell[i][j];
 								pDoc->cell[k][j] = 0;
@@ -272,19 +268,17 @@ void CMy2048GameView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	else if (nChar == 40) {
 		for (int j = pDoc->size - 1; j >= 0; j--) {
 			for (int i = pDoc->size - 1; i >= 0; i--) {
-				for (int k = i - 1; k >= 0; k--)
-				{
-					if (pDoc->cell[j][k] != 0)
-					{
-						if (pDoc->cell[j][i] == 0)
-						{
+				for (int k = i - 1; k >= 0; k--) {
+					if (pDoc->cell[j][k] != 0) {
+						if (pDoc->cell[j][i] == 0) {
+							numMoves++;
+
 							pDoc->cell[j][i] = pDoc->cell[j][k];
 							pDoc->cell[j][k] = 0;
-						}
-						else
-						{
-							if (pDoc->cell[j][i] == pDoc->cell[j][k])
-							{
+						} else {
+							if (pDoc->cell[j][i] == pDoc->cell[j][k]) {
+								numMoves++;
+
 								pDoc->cell[j][i] += pDoc->cell[j][k];
 								pDoc->points += pDoc->cell[j][i];
 								pDoc->cell[j][k] = 0;
@@ -297,7 +291,10 @@ void CMy2048GameView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		}
 	}
 
-	pDoc->GenerateNewRandomCell();
+	CString str;
+	str.Format(L"\n%d", numMoves);
+	TRACE(str);
+	if (numMoves) pDoc->GenerateNewRandomCell();
 	Invalidate();
 
 	CView::OnKeyDown(nChar, nRepCnt, nFlags);
