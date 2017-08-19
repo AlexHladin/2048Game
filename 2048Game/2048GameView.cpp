@@ -51,8 +51,8 @@ void CMy2048GameView::OnInitialUpdate()
 	pointsContainer = new StringContainer(IDS_POINTS, &GetDocument()->points, new CPoint(0, 0));
 }
 
-// CMy2048GameView drawing
 
+// CMy2048GameView drawing
 void CMy2048GameView::OnDraw(CDC* pDC)
 {
 	CMy2048GameDoc* pDoc = GetDocument();
@@ -63,8 +63,7 @@ void CMy2048GameView::OnDraw(CDC* pDC)
 	CRect rect;
 	GetClientRect(&rect);
 
-	float size = (min(rect.right, rect.bottom) - pointsContainer->GetHeight() - 10) / pDoc->size;
-
+	float size = (min(rect.Width(), rect.Height() - pointsContainer->GetHeight() - 10)) / pDoc->size;
 	float x = 0, y = 0, offset = .05f * size;
 
 	pointsContainer->position->SetPoint(offset, offset);
@@ -291,10 +290,8 @@ void CMy2048GameView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		}
 	}
 
-	CString str;
-	str.Format(L"\n%d", numMoves);
-	TRACE(str);
 	if (numMoves) pDoc->GenerateNewRandomCell();
+
 	Invalidate();
 
 	CView::OnKeyDown(nChar, nRepCnt, nFlags);

@@ -8,3 +8,4 @@ Used with Visual Studio 2015
 # TODO
 * Undo
 * Preview view
+* Lose view
