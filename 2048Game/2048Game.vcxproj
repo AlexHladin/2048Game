@@ -188,6 +188,7 @@
     <ClInclude Include="2048Game.h" />
     <ClInclude Include="2048GameDoc.h" />
     <ClInclude Include="2048GameView.h" />
+    <ClInclude Include="PreviewView.h" />
     <ClInclude Include="StringContainer.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="Resource.h" />
@@ -199,6 +200,7 @@
     <ClCompile Include="2048Game.cpp" />
     <ClCompile Include="2048GameDoc.cpp" />
     <ClCompile Include="2048GameView.cpp" />
+    <ClCompile Include="PreviewView.cpp" />
     <ClCompile Include="StringContainer.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="SettingsDialog.cpp" />

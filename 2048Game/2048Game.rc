@@ -509,6 +509,8 @@ BEGIN
     IDP_OLE_INIT_FAILED     "OLE initialization failed.  Make sure that the OLE libraries are the correct version."
     IDS_LOSE                "You lose"
     IDS_POINTS              "Points"
+    IDS_START_GAME          "Start game"
+    IDS_ABOUT               "About game"
 END
 
 STRINGTABLE

@@ -5,18 +5,20 @@
 #pragma once
 
 #include "StringContainer.h"
+#include "2048GameDoc.h"
 
 class CMy2048GameView : public CView
 {
 private:
 	StringContainer* pointsContainer;
 
-protected: // create from serialization only
-	CMy2048GameView();
+protected:
 	DECLARE_DYNCREATE(CMy2048GameView)
 
 // Attributes
 public:
+	CMy2048GameView();
+
 	CMy2048GameDoc* GetDocument() const;
 
 // Operations

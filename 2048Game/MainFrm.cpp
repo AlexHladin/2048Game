@@ -6,6 +6,7 @@
 #include "2048Game.h"
 
 #include "MainFrm.h"
+#include "2048GameView.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -318,4 +319,27 @@ BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParent
 	}
 
 	return TRUE;
+}
+
+
+void CMainFrame::StartGame()
+{
+	CRect rect;
+	GetClientRect(rect);
+
+	CCreateContext context;
+	context.m_pCurrentDoc = GetActiveDocument();
+
+	CMy2048GameView* gameView = new CMy2048GameView;
+	gameView->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW, rect, this, AFX_IDW_PANE_FIRST, &context);
+	CView* activeView = GetActiveView();
+	// GetActiveDocument()->AddView(gameView);
+	activeView->ShowWindow(SW_HIDE);
+	// GetActiveDocument()->RemoveView(activeView);
+
+	SetActiveView(gameView);
+	gameView->OnInitialUpdate();
+	delete activeView;
+
+	RecalcLayout();
 }

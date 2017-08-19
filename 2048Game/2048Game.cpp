@@ -9,7 +9,7 @@
 #include "MainFrm.h"
 
 #include "2048GameDoc.h"
-#include "2048GameView.h"
+#include "PreviewView.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -115,7 +115,7 @@ BOOL CMy2048GameApp::InitInstance()
 		IDR_MAINFRAME,
 		RUNTIME_CLASS(CMy2048GameDoc),
 		RUNTIME_CLASS(CMainFrame),       // main SDI frame window
-		RUNTIME_CLASS(CMy2048GameView));
+		RUNTIME_CLASS(PreviewView));
 	if (!pDocTemplate)
 		return FALSE;
 	AddDocTemplate(pDocTemplate);
@@ -165,6 +165,8 @@ protected:
 // Implementation
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+//	void StartGame();
 };
 
 CAboutDlg::CAboutDlg() : CDialogEx(IDD_ABOUTBOX)
@@ -209,6 +211,3 @@ void CMy2048GameApp::SaveCustomState()
 }
 
 // CMy2048GameApp message handlers
-
-
-

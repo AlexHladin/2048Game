@@ -46,8 +46,7 @@ void StringContainer::OnDraw(CDC* pDC)
 	CBrush brushBlue(RGB(188, 172, 157));
 	LOGFONT descriptionFont;
 	descriptionTextFont.GetLogFont(&descriptionFont);
-	CPen grayPen;
-	grayPen.CreatePen(PS_SOLID, 0, RGB(188, 172, 157));
+	CPen grayPen(PS_SOLID, 0, RGB(188, 172, 157));
 
 	int oldBkMode = pDC->SetBkMode(TRANSPARENT);
 	CFont* oldFont = pDC->SelectObject(&descriptionTextFont);

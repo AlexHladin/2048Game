@@ -6,6 +6,8 @@
 #define IDP_OLE_INIT_FAILED             100
 #define IDS_LOSE                        101
 #define IDS_POINTS                      102
+#define IDS_START_GAME                  103
+#define IDS_ABOUT                       104
 #define IDR_POPUP_EDIT                  119
 #define ID_STATUSBAR_PANE1              120
 #define ID_STATUSBAR_PANE2              121
