@@ -57,7 +57,7 @@ CMy2048GameDoc::~CMy2048GameDoc()
 {
 	if (cell) {
 		for (int i = 0; i < size; i++)
-			delete[] cell[i];
+			delete cell[i];
 
 		delete[] cell;
 	}
