@@ -9,3 +9,5 @@ Used with Visual Studio 2015
 * Undo
 * Preview view
 * Lose view
+
+![Screenshot](/screenshots/1.png)
