@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Button.h"
 
 // PreviewView view
 
@@ -7,8 +8,8 @@ class PreviewView : public CView
 {
 	DECLARE_DYNCREATE(PreviewView)
 
-	CRect* startButtonRect;
-	CRect* aboutButtonRect;
+	Button* startButton;
+	Button* aboutButton;
 
 protected:
 	PreviewView();           // protected constructor used by dynamic creation

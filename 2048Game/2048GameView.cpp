@@ -39,8 +39,7 @@ CMy2048GameView::CMy2048GameView()
 
 CMy2048GameView::~CMy2048GameView()
 {
-	if (pointsContainer)
-		delete pointsContainer;
+	if (pointsContainer) delete pointsContainer;
 }
 
 
@@ -48,7 +47,7 @@ void CMy2048GameView::OnInitialUpdate()
 {
 	CView::OnInitialUpdate();
 
-	pointsContainer = new StringContainer(IDS_POINTS, &GetDocument()->points, new CPoint(0, 0));
+	pointsContainer = new StringContainer(IDS_POINTS, &GetDocument()->points, CPoint(), CSize());
 }
 
 
@@ -66,7 +65,7 @@ void CMy2048GameView::OnDraw(CDC* pDC)
 	float size = (min(rect.Width(), rect.Height() - pointsContainer->GetHeight() - 10)) / pDoc->size;
 	float x = 0, y = 0, offset = .05f * size;
 
-	pointsContainer->position->SetPoint(offset, offset);
+	pointsContainer->position.SetPoint(offset, offset);
 
 	CFont font;
 	CFont* font_st;
@@ -91,7 +90,6 @@ void CMy2048GameView::OnDraw(CDC* pDC)
 
 		pDC->SelectObject(&font);
 
-		int oldBkMode, oldBkColor;
 		float startY = pointsContainer->GetHeight() + 2 * offset;
 
 		// draw background rect		
