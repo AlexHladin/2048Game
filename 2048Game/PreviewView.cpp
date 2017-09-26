@@ -14,12 +14,16 @@ PreviewView::PreviewView()
 {
 	startButton = new Button(IDS_START_GAME, RGB(246, 132, 96), RGB(255, 255, 255), CPoint(), CSize());
 	aboutButton = new Button(IDS_ABOUT, RGB(144, 122, 102), RGB(255, 255, 255), CPoint(), CSize());
+
+	titleFont = FontFactory::CreateFont(100);
 }
 
 PreviewView::~PreviewView()
 {
 	if (startButton) delete startButton;
 	if (aboutButton) delete aboutButton;
+
+	if (titleFont) delete titleFont;
 }
 
 BEGIN_MESSAGE_MAP(PreviewView, CView)
@@ -36,13 +40,24 @@ void PreviewView::OnDraw(CDC* pDC)
 	GetClientRect(rect);
 
 	// recalc button size
-	startButton->position.SetPoint(rect.Width() * .2, rect.Height() * .6);
-	startButton->size.SetSize(rect.Width() * .8, rect.Height() * .67);
-	aboutButton->position.SetPoint(rect.Width() * .2, rect.Height() * .7);
-	aboutButton->size.SetSize(rect.Width() * .8, rect.Height() * .77);
+	startButton->position.SetPoint(rect.Width() * .2, rect.Height() * .5);
+	startButton->size.SetSize(rect.Width() * .8, rect.Height() * .57);
+	aboutButton->position.SetPoint(rect.Width() * .2, rect.Height() * .6);
+	aboutButton->size.SetSize(rect.Width() * .8, rect.Height() * .67);
 
 	startButton->OnDraw(pDC);
 	aboutButton->OnDraw(pDC);
+
+	CFont font;
+	CFont* font_st;
+
+	font_st = pDC->SelectObject(&font);
+
+	font.CreateFontIndirect(titleFont);
+	pDC->SelectObject(&font);
+	pDC->DrawTextW(L"2048", rect, DT_CENTER | DT_SINGLELINE);
+
+	pDC->SelectObject(font_st);
 }
 
 

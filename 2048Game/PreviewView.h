@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Button.h"
+#include "FontFactory.h"
 
 // PreviewView view
 
@@ -10,6 +11,7 @@ class PreviewView : public CView
 
 	Button* startButton;
 	Button* aboutButton;
+	LOGFONT* titleFont;
 
 protected:
 	PreviewView();           // protected constructor used by dynamic creation
