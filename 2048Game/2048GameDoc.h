@@ -9,6 +9,8 @@
 #include <set>
 #include <vector>
 
+#include "FontFactory.h"
+
 #pragma once
 
 class CMy2048GameDoc : public CDocument
@@ -25,7 +27,6 @@ public:
 	int size;
 	int** cell;
 
-	LOGFONT fontText;
 	COLORREF bkColor;
 	bool start;
 

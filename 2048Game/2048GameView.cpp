@@ -35,11 +35,13 @@ END_MESSAGE_MAP()
 CMy2048GameView::CMy2048GameView()
 {
 	pointsContainer = 0;
+	fontText = FontFactory::CreateFont(40);
 }
 
 CMy2048GameView::~CMy2048GameView()
 {
 	if (pointsContainer) delete pointsContainer;
+	if (fontText) delete fontText;
 }
 
 
@@ -84,7 +86,7 @@ void CMy2048GameView::OnDraw(CDC* pDC)
 
 		font_st = pDC->SelectObject(&font);
 
-		font.CreateFontIndirect(&pDoc->fontText);
+		font.CreateFontIndirect(fontText);
 		pDC->SetBkColor(pDoc->bkColor);
 		pDC->SetTextColor(RGB(255, 255, 255));
 

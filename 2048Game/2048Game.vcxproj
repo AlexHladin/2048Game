@@ -190,6 +190,7 @@
     <ClInclude Include="2048GameView.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Container.h" />
+    <ClInclude Include="FontFactory.h" />
     <ClInclude Include="PreviewView.h" />
     <ClInclude Include="StringContainer.h" />
     <ClInclude Include="MainFrm.h" />
@@ -204,6 +205,7 @@
     <ClCompile Include="2048GameView.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Container.cpp" />
+    <ClCompile Include="FontFactory.cpp" />
     <ClCompile Include="PreviewView.cpp" />
     <ClCompile Include="StringContainer.cpp" />
     <ClCompile Include="MainFrm.cpp" />

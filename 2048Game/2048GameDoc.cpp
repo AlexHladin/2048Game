@@ -32,21 +32,6 @@ END_MESSAGE_MAP()
 
 CMy2048GameDoc::CMy2048GameDoc()
 {
-	fontText.lfHeight = -40;
-	fontText.lfWidth = 0;
-	fontText.lfEscapement = 0;
-	fontText.lfOrientation = 0;
-	fontText.lfWeight = FW_NORMAL;
-	fontText.lfItalic = 0;
-	fontText.lfUnderline = 0;
-	fontText.lfStrikeOut = 0;
-	fontText.lfCharSet = ANSI_CHARSET;
-	fontText.lfOutPrecision = OUT_DEFAULT_PRECIS;
-	fontText.lfClipPrecision = CLIP_DEFAULT_PRECIS;
-	fontText.lfQuality = PROOF_QUALITY;
-	fontText.lfPitchAndFamily = VARIABLE_PITCH | FF_ROMAN;
-	wcscpy_s(fontText.lfFaceName, L"Times New Roman");
-
 	cell = nullptr;
 	points = 0;
 	size = 4;

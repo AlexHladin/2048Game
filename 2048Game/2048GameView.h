@@ -11,6 +11,7 @@ class CMy2048GameView : public CView
 {
 private:
 	StringContainer* pointsContainer;
+	LOGFONT* fontText;
 
 protected:
 	DECLARE_DYNCREATE(CMy2048GameView)
