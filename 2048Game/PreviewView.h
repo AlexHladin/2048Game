@@ -1,17 +1,21 @@
 #pragma once
 
+#include <memory>
+
 #include "Button.h"
 #include "FontFactory.h"
 
 // PreviewView view
 
+using std::shared_ptr;
+
 class PreviewView : public CView
 {
 	DECLARE_DYNCREATE(PreviewView)
 
-	Button* startButton;
-	Button* aboutButton;
-	LOGFONT* titleFont;
+	shared_ptr<Button> m_startButton;
+	shared_ptr<Button> m_aboutButton;
+	shared_ptr<LOGFONT> m_titleFont;
 
 protected:
 	PreviewView();           // protected constructor used by dynamic creation

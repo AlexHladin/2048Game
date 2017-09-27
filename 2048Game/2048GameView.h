@@ -4,14 +4,18 @@
 
 #pragma once
 
+#include <memory>
+
 #include "StringContainer.h"
 #include "2048GameDoc.h"
+
+using std::shared_ptr;
 
 class CMy2048GameView : public CView
 {
 private:
-	StringContainer* pointsContainer;
-	LOGFONT* fontText;
+	shared_ptr<StringContainer> m_pointsContainer;
+	shared_ptr<LOGFONT> m_fontText;
 
 protected:
 	DECLARE_DYNCREATE(CMy2048GameView)

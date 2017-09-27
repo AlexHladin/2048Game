@@ -32,16 +32,14 @@ END_MESSAGE_MAP()
 
 // CMy2048GameView construction/destruction
 
-CMy2048GameView::CMy2048GameView()
+CMy2048GameView::CMy2048GameView() :
+	m_pointsContainer(0),
+	m_fontText(FontFactory::CreateFont(40))
 {
-	pointsContainer = 0;
-	fontText = FontFactory::CreateFont(40);
 }
 
 CMy2048GameView::~CMy2048GameView()
 {
-	if (pointsContainer) delete pointsContainer;
-	if (fontText) delete fontText;
 }
 
 
@@ -49,7 +47,8 @@ void CMy2048GameView::OnInitialUpdate()
 {
 	CView::OnInitialUpdate();
 
-	pointsContainer = new StringContainer(IDS_POINTS, &GetDocument()->points, CPoint(), CSize());
+	m_pointsContainer = shared_ptr<StringContainer>(
+		new StringContainer(IDS_POINTS, &GetDocument()->points, CPoint(), CSize()));
 }
 
 
@@ -58,16 +57,16 @@ void CMy2048GameView::OnDraw(CDC* pDC)
 {
 	CMy2048GameDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
-	if (!pDoc || !pDoc->cell || !pointsContainer)
+	if (!pDoc || !pDoc->cell || !m_pointsContainer)
 		return;
 
 	CRect rect;
 	GetClientRect(&rect);
 
-	float size = (min(rect.Width(), rect.Height() - pointsContainer->GetHeight() - 10)) / pDoc->size;
+	float size = (min(rect.Width(), rect.Height() - m_pointsContainer->GetHeight() - 10)) / pDoc->size;
 	float x = 0, y = 0, offset = .05f * size;
 
-	pointsContainer->position.SetPoint(offset, offset);
+	m_pointsContainer->position.SetPoint(offset, offset);
 
 	CFont font;
 	CFont* font_st;
@@ -86,13 +85,13 @@ void CMy2048GameView::OnDraw(CDC* pDC)
 
 		font_st = pDC->SelectObject(&font);
 
-		font.CreateFontIndirect(fontText);
+		font.CreateFontIndirect(m_fontText.get());
 		pDC->SetBkColor(pDoc->bkColor);
 		pDC->SetTextColor(RGB(255, 255, 255));
 
 		pDC->SelectObject(&font);
 
-		float startY = pointsContainer->GetHeight() + 2 * offset;
+		float startY = m_pointsContainer->GetHeight() + 2 * offset;
 
 		// draw background rect		
 		CBrush b(RGB(188, 176, 162));
@@ -148,7 +147,7 @@ void CMy2048GameView::OnDraw(CDC* pDC)
 			x += size;
 		}
 		
-		pointsContainer->OnDraw(pDC);
+		m_pointsContainer->OnDraw(pDC);
 
 		pDC->SelectObject(font_st);
 	}
