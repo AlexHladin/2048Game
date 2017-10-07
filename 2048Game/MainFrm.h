@@ -4,6 +4,11 @@
 
 #pragma once
 
+#include "PreviewView.h"
+#include "2048GameView.h"
+
+class CMy2048GameView;
+
 class CMainFrame : public CFrameWndEx
 {
 	
@@ -13,6 +18,8 @@ protected: // create from serialization only
 
 // Attributes
 public:
+	PreviewView* previewView = nullptr;
+	CMy2048GameView* gameView = nullptr;
 
 // Operations
 public:
@@ -46,6 +53,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	void StartGame();
+	void ShowPreview();
 };
 
 

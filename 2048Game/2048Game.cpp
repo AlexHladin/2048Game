@@ -10,6 +10,7 @@
 
 #include "2048GameDoc.h"
 #include "PreviewView.h"
+#include "2048GameView.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -133,6 +134,15 @@ BOOL CMy2048GameApp::InitInstance()
 	// The one and only window has been initialized, so show and update it
 	m_pMainWnd->ShowWindow(SW_SHOW);
 	m_pMainWnd->UpdateWindow();
+
+	CMainFrame* frame = (CMainFrame*)m_pMainWnd;
+	frame->previewView = (PreviewView*) frame->GetActiveView();
+	frame->gameView = new CMy2048GameView;
+	frame->gameView->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW, frame->rectDefault, frame, AFX_IDW_PANE_FIRST + 1, NULL);
+	frame->GetActiveDocument()->AddView(frame->gameView);
+
+	frame->gameView->ShowWindow(SW_HIDE);
+
 	return TRUE;
 }
 

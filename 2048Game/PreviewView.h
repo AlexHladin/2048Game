@@ -7,18 +7,19 @@
 
 // PreviewView view
 
-using std::shared_ptr;
+using std::auto_ptr;
 
 class PreviewView : public CView
 {
 	DECLARE_DYNCREATE(PreviewView)
 
-	shared_ptr<Button> m_startButton;
-	shared_ptr<Button> m_aboutButton;
-	shared_ptr<LOGFONT> m_titleFont;
+	auto_ptr<Button> m_startButton;
+	auto_ptr<Button> m_aboutButton;
+	auto_ptr<LOGFONT> m_titleFont;
 
-protected:
-	PreviewView();           // protected constructor used by dynamic creation
+	PreviewView();
+
+protected:	
 	virtual ~PreviewView();
 
 public:

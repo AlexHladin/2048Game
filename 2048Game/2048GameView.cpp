@@ -28,14 +28,19 @@ BEGIN_MESSAGE_MAP(CMy2048GameView, CView)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CMy2048GameView::OnFilePrintPreview)
 	ON_WM_CONTEXTMENU()
 	ON_WM_KEYDOWN()
+	ON_WM_LBUTTONDOWN()
 END_MESSAGE_MAP()
 
 // CMy2048GameView construction/destruction
 
 CMy2048GameView::CMy2048GameView() :
 	m_pointsContainer(0),
-	m_fontText(FontFactory::CreateFont(40))
+	m_fontText(FontFactory::CreateFont(40)),
+	m_menuBtn(new Button(IDS_MENU, RGB(255, 255, 255), (COLORREF) 0, CPoint(), CSize())),
+	m_undoBtn(new Button(IDS_UNDO, RGB(255, 255, 255), (COLORREF) 0, CPoint(), CSize()))
 {
+	m_menuBtn->SetPenPropertiest(PS_SOLID, 1, (COLORREF)0);
+	m_undoBtn->SetPenPropertiest(PS_SOLID, 1, (COLORREF) 0);
 }
 
 CMy2048GameView::~CMy2048GameView()
@@ -46,9 +51,11 @@ CMy2048GameView::~CMy2048GameView()
 void CMy2048GameView::OnInitialUpdate()
 {
 	CView::OnInitialUpdate();
-
-	m_pointsContainer = shared_ptr<StringContainer>(
-		new StringContainer(IDS_POINTS, &GetDocument()->points, CPoint(), CSize()));
+	m_pointsContainer = auto_ptr<StringContainer>(new StringContainer(
+		IDS_POINTS, 
+		&GetDocument()->points, 
+		CPoint(), 
+		CSize()));
 }
 
 
@@ -57,7 +64,7 @@ void CMy2048GameView::OnDraw(CDC* pDC)
 {
 	CMy2048GameDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
-	if (!pDoc || !pDoc->cell || !m_pointsContainer)
+	if (!pDoc || !pDoc->cell || !m_pointsContainer.get())
 		return;
 
 	CRect rect;
@@ -65,6 +72,11 @@ void CMy2048GameView::OnDraw(CDC* pDC)
 
 	float size = (min(rect.Width(), rect.Height() - m_pointsContainer->GetHeight() - 10)) / pDoc->size;
 	float x = 0, y = 0, offset = .05f * size;
+
+	m_menuBtn->position.SetPoint(rect.Width() * .68, offset);
+	m_menuBtn->size.SetSize(rect.Width() * .3, rect.Height() * .06);
+	m_undoBtn->position.SetPoint(rect.Width() * .68, offset + rect.Height() * .08);
+	m_undoBtn->size.SetSize(rect.Width() * .3, rect.Height() * .06);
 
 	m_pointsContainer->position.SetPoint(offset, offset);
 
@@ -150,6 +162,9 @@ void CMy2048GameView::OnDraw(CDC* pDC)
 		m_pointsContainer->OnDraw(pDC);
 
 		pDC->SelectObject(font_st);
+
+		m_menuBtn->OnDraw(pDC);
+		m_undoBtn->OnDraw(pDC);
 	}
 }
 
@@ -294,4 +309,16 @@ void CMy2048GameView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	Invalidate();
 
 	CView::OnKeyDown(nChar, nRepCnt, nFlags);
+}
+
+
+void CMy2048GameView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	if (!m_menuBtn.get() || !m_undoBtn.get()) return;
+
+	if (m_menuBtn->PtInRect(point))
+		((CMainFrame*)AfxGetMainWnd())->ShowPreview();
+	else if (m_undoBtn->PtInRect(point)) {
+		// show about
+	}
 }

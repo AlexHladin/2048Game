@@ -20,6 +20,6 @@ Container::~Container()
 
 bool Container::PtInRect(CPoint point)
 {
-	CRect rect(position.x, position.y, size.cx, size.cy);
+	CRect rect(position.x, position.y, position.x + size.cx, position.y + size.cy);
 	return rect.PtInRect(point);
 }

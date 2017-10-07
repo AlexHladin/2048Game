@@ -8,6 +8,8 @@
 #define IDS_POINTS                      102
 #define IDS_START_GAME                  103
 #define IDS_ABOUT                       104
+#define IDS_UNDO                        105
+#define IDS_MENU                        106
 #define IDR_POPUP_EDIT                  119
 #define ID_STATUSBAR_PANE1              120
 #define ID_STATUSBAR_PANE2              121

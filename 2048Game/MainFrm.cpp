@@ -324,22 +324,27 @@ BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParent
 
 void CMainFrame::StartGame()
 {
-	CRect rect;
-	GetClientRect(rect);
+	previewView->ShowWindow(SW_HIDE);
+	gameView->ShowWindow(SW_HIDE);
 
-	CCreateContext context;
-	context.m_pCurrentDoc = GetActiveDocument();
+	previewView->SetDlgCtrlID(AFX_IDW_PANE_FIRST + 1);
 
-	CMy2048GameView* gameView = new CMy2048GameView;
-	gameView->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW, rect, this, AFX_IDW_PANE_FIRST, &context);
-	CView* activeView = GetActiveView();
-	// GetActiveDocument()->AddView(gameView);
-	activeView->ShowWindow(SW_HIDE);
-	// GetActiveDocument()->RemoveView(activeView);
-
-	SetActiveView(gameView);
+	gameView->SetDlgCtrlID(AFX_IDW_PANE_FIRST);
 	gameView->OnInitialUpdate();
-	delete activeView;
+	gameView->ShowWindow(SW_SHOW);
+
+	RecalcLayout();
+}
+
+void CMainFrame::ShowPreview()
+{
+	previewView->ShowWindow(SW_HIDE);
+	gameView->ShowWindow(SW_HIDE);
+
+	gameView->SetDlgCtrlID(AFX_IDW_PANE_FIRST + 1);
+
+	previewView->SetDlgCtrlID(AFX_IDW_PANE_FIRST);
+	previewView->ShowWindow(SW_SHOW);
 
 	RecalcLayout();
 }

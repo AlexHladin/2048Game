@@ -511,6 +511,8 @@ BEGIN
     IDS_POINTS              "Points"
     IDS_START_GAME          "Start game"
     IDS_ABOUT               "About game"
+    IDS_UNDO                "Undo"
+    IDS_MENU                "Menu"
 END
 
 STRINGTABLE

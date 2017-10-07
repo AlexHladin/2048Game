@@ -8,14 +8,18 @@
 
 #include "StringContainer.h"
 #include "2048GameDoc.h"
+#include "Button.h"
+#include "MainFrm.h"
 
-using std::shared_ptr;
+using std::auto_ptr;
 
 class CMy2048GameView : public CView
 {
 private:
-	shared_ptr<StringContainer> m_pointsContainer;
-	shared_ptr<LOGFONT> m_fontText;
+	auto_ptr<StringContainer> m_pointsContainer;
+	auto_ptr<LOGFONT> m_fontText;
+	auto_ptr<Button> m_undoBtn;
+	auto_ptr<Button> m_menuBtn;
 
 protected:
 	DECLARE_DYNCREATE(CMy2048GameView)
@@ -78,7 +82,8 @@ public:
 		default:
 			return RGB(255, 30, 31);
 		}
-	}
+	};
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 };
 
 #ifndef _DEBUG  // debug version in 2048GameView.cpp
