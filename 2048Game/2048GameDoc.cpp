@@ -32,7 +32,6 @@ END_MESSAGE_MAP()
 
 CMy2048GameDoc::CMy2048GameDoc()
 {
-	cell = nullptr;
 	points = 0;
 	size = 4;
 	bkColor = RGB(214, 205, 196);
@@ -40,11 +39,16 @@ CMy2048GameDoc::CMy2048GameDoc()
 
 CMy2048GameDoc::~CMy2048GameDoc()
 {
-	if (cell) {
-		for (int i = 0; i < size; i++)
-			delete cell[i];
+	if (cells.size()) {
+		while (cells.size()) {
+			int** cell = cells.top();
+			cells.pop();
 
-		delete[] cell;
+			for (int i = 0; i < size; i++)
+				delete cell[i];
+
+			delete[] cell;
+		}
 	}
 }
 
@@ -55,7 +59,7 @@ BOOL CMy2048GameDoc::OnNewDocument()
 	if (!CDocument::OnNewDocument())
 		return FALSE;
 
-	cell = new int*[size];
+	int** cell = new int*[size];
 	for (int i = 0; i < size; i++) {
 		cell[i] = new int[size];
 		for (int j = 0; j < size; j++)
@@ -85,7 +89,8 @@ BOOL CMy2048GameDoc::OnNewDocument()
 	}
 
 	start = true;
-		
+	cells.push(cell);
+
 	return TRUE;
 }
 
@@ -210,7 +215,7 @@ BOOL CMy2048GameDoc::OnSaveDocument(LPCTSTR lpszPathName)
 
 void CMy2048GameDoc::GenerateNewRandomCell()
 {
-	if (cell == nullptr) return;
+	if (cells.top() == nullptr) return;
 
 	std::vector<std::pair<int, int>> freeCells;
 
@@ -218,23 +223,23 @@ void CMy2048GameDoc::GenerateNewRandomCell()
 	GetFreeCells(freeCells);
 	
 	// fill random cell
-	std::pair<int, int> randCoord = freeCells[rand() % freeCells.size()];
-	cell[randCoord.first][randCoord.second] = (rand() % 2 + 1) * 2;
+	pair<int, int> randCoord = freeCells[rand() % freeCells.size()];
+	cells.top()[randCoord.first][randCoord.second] = (rand() % 2 + 1) * 2;
 }
 
 
 // Function that fill std::vector elements with std::pair that contain coord of free cells
-void CMy2048GameDoc::GetFreeCells(std::vector<std::pair<int, int>>& in)
+void CMy2048GameDoc::GetFreeCells(vector<pair<int, int>>& in)
 {
 	for (int i = 0; i < size; i++)
 		for (int j = 0; j < size; j++)
-			if (!cell[i][j]) in.push_back(std::pair<int, int>(i, j));
+			if (!cells.top()[i][j]) in.push_back(pair<int, int>(i, j));
 }
 
 
 int CMy2048GameDoc::GetFreeCellsCount()
 {
-	std::vector<std::pair<int, int>> freeCells;
+	vector<pair<int, int>> freeCells;
 	GetFreeCells(freeCells);
 
 	return freeCells.size();

@@ -64,7 +64,7 @@ void CMy2048GameView::OnDraw(CDC* pDC)
 {
 	CMy2048GameDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
-	if (!pDoc || !pDoc->cell || !m_pointsContainer.get())
+	if (!pDoc || !pDoc->cells.size() || !m_pointsContainer.get())
 		return;
 
 	CRect rect;
@@ -75,6 +75,8 @@ void CMy2048GameView::OnDraw(CDC* pDC)
 
 	m_menuBtn->position.SetPoint(rect.Width() * .68, offset);
 	m_menuBtn->size.SetSize(rect.Width() * .3, rect.Height() * .06);
+	
+	CreateUndoString(m_undoBtn->GetTextPtr());
 	m_undoBtn->position.SetPoint(rect.Width() * .68, offset + rect.Height() * .08);
 	m_undoBtn->size.SetSize(rect.Width() * .3, rect.Height() * .06);
 
@@ -88,7 +90,7 @@ void CMy2048GameView::OnDraw(CDC* pDC)
 	brush.CreateSolidBrush(pDoc->bkColor);
 	CString val;
 
-	if (pDoc->start && pDoc->cell) {
+	if (pDoc->start && pDoc->cells.size()) {
 		if (!pDoc->GetFreeCellsCount()) {
 			pDoc->start = FALSE;
 			AfxMessageBox(IDS_LOSE);
@@ -127,7 +129,7 @@ void CMy2048GameView::OnDraw(CDC* pDC)
 				valRect.right = x + size - offset;
 				valRect.bottom = y + size - offset;
 
-				int color = GetColorByNumber(pDoc->cell[i][j]);
+				int color = GetColorByNumber(pDoc->cells.top()[i][j]);
 
 				CPen pen;
 				pen.CreatePen(PS_SOLID, 0, color);
@@ -138,12 +140,12 @@ void CMy2048GameView::OnDraw(CDC* pDC)
 				
 				pDC->RoundRect(valRect, CPoint(10, 10));
 
-				if (pDoc->cell[i][j]) {
+				if (pDoc->cells.top()[i][j]) {
 					int oldTextColor = 0;
-					if (pDoc->cell[i][j] < 8)
+					if (pDoc->cells.top()[i][j] < 8)
 						oldTextColor = pDC->SetTextColor(RGB(126, 117, 100));
 
-					val.Format(L"%d", pDoc->cell[i][j]);
+					val.Format(L"%d", pDoc->cells.top()[i][j]);
 					pDC->DrawTextW(val, valRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 
 					if (oldTextColor)
@@ -203,24 +205,36 @@ void CMy2048GameView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	
 	if (!pDoc->start) return;
 
+	int** cell = new int*[pDoc->size];
+	int** oldCell = pDoc->cells.top();
+
+	for (int i = 0; i < pDoc->size; i++) {
+		cell[i] = new int[pDoc->size];
+		for (int j = 0; j < pDoc->size; j++) {
+			cell[i][j] = oldCell[i][j];
+		}
+	}
+	
+	pDoc->cells.push(cell);
+
 	int numMoves = 0;
 	if (nChar == 37) {
 		for (int j = 0; j < pDoc->size; j++) {
 			for (int i = 0; i < pDoc->size; i++) {
 				for (int k = i + 1; k < pDoc->size; k++) {
-					if (pDoc->cell[k][j] != 0) {						
-						if (pDoc->cell[i][j] == 0) {
+					if (pDoc->cells.top()[k][j] != 0) {						
+						if (pDoc->cells.top()[i][j] == 0) {
 							numMoves++;
 
-							pDoc->cell[i][j] = pDoc->cell[k][j];
-							pDoc->cell[k][j] = 0;
+							pDoc->cells.top()[i][j] = pDoc->cells.top()[k][j];
+							pDoc->cells.top()[k][j] = 0;
 						} else {
-							if (pDoc->cell[i][j] == pDoc->cell[k][j]) {
+							if (pDoc->cells.top()[i][j] == pDoc->cells.top()[k][j]) {
 								numMoves++;
 
-								pDoc->cell[i][j] += pDoc->cell[k][j];
-								pDoc->points += pDoc->cell[i][j];
-								pDoc->cell[k][j] = 0;
+								pDoc->cells.top()[i][j] += pDoc->cells.top()[k][j];
+								pDoc->points += pDoc->cells.top()[i][j];
+								pDoc->cells.top()[k][j] = 0;
 							}
 							break;
 						}
@@ -233,19 +247,19 @@ void CMy2048GameView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		for (int j = 0; j < pDoc->size; j++) {
 			for (int i = 0; i < pDoc->size; i++) {
 				for (int k = i + 1; k < pDoc->size; k++) {
-					if (pDoc->cell[j][k] != 0) {
-						if (pDoc->cell[j][i] == 0) {
+					if (pDoc->cells.top()[j][k] != 0) {
+						if (pDoc->cells.top()[j][i] == 0) {
 							numMoves++;
 
-							pDoc->cell[j][i] = pDoc->cell[j][k];
-							pDoc->cell[j][k] = 0;
+							pDoc->cells.top()[j][i] = pDoc->cells.top()[j][k];
+							pDoc->cells.top()[j][k] = 0;
 						} else { 
-							if (pDoc->cell[j][i] == pDoc->cell[j][k]) {
+							if (pDoc->cells.top()[j][i] == pDoc->cells.top()[j][k]) {
 								numMoves++;
 
-								pDoc->cell[j][i] += pDoc->cell[j][k];
-								pDoc->points += pDoc->cell[j][i];
-								pDoc->cell[j][k] = 0;
+								pDoc->cells.top()[j][i] += pDoc->cells.top()[j][k];
+								pDoc->points += pDoc->cells.top()[j][i];
+								pDoc->cells.top()[j][k] = 0;
 							}
 							break;
 						}
@@ -257,19 +271,19 @@ void CMy2048GameView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		for (int j = pDoc->size - 1; j >= 0; j--) {
 			for (int i = pDoc->size - 1; i >= 0; i--) {
 				for (int k = i - 1; k >= 0; k--) {
-					if (pDoc->cell[k][j] != 0) {
-						if (pDoc->cell[i][j] == 0) {
+					if (pDoc->cells.top()[k][j] != 0) {
+						if (pDoc->cells.top()[i][j] == 0) {
 							numMoves++;
 
-							pDoc->cell[i][j] = pDoc->cell[k][j];
-							pDoc->cell[k][j] = 0;
+							pDoc->cells.top()[i][j] = pDoc->cells.top()[k][j];
+							pDoc->cells.top()[k][j] = 0;
 						} else {
-							if (pDoc->cell[i][j] == pDoc->cell[k][j]) {
+							if (pDoc->cells.top()[i][j] == pDoc->cells.top()[k][j]) {
 								numMoves++;
 
-								pDoc->cell[i][j] += pDoc->cell[k][j];
-								pDoc->points += pDoc->cell[i][j];
-								pDoc->cell[k][j] = 0;
+								pDoc->cells.top()[i][j] += pDoc->cells.top()[k][j];
+								pDoc->points += pDoc->cells.top()[i][j];
+								pDoc->cells.top()[k][j] = 0;
 							}
 							break;
 						}
@@ -282,19 +296,19 @@ void CMy2048GameView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		for (int j = pDoc->size - 1; j >= 0; j--) {
 			for (int i = pDoc->size - 1; i >= 0; i--) {
 				for (int k = i - 1; k >= 0; k--) {
-					if (pDoc->cell[j][k] != 0) {
-						if (pDoc->cell[j][i] == 0) {
+					if (pDoc->cells.top()[j][k] != 0) {
+						if (pDoc->cells.top()[j][i] == 0) {
 							numMoves++;
 
-							pDoc->cell[j][i] = pDoc->cell[j][k];
-							pDoc->cell[j][k] = 0;
+							pDoc->cells.top()[j][i] = pDoc->cells.top()[j][k];
+							pDoc->cells.top()[j][k] = 0;
 						} else {
-							if (pDoc->cell[j][i] == pDoc->cell[j][k]) {
+							if (pDoc->cells.top()[j][i] == pDoc->cells.top()[j][k]) {
 								numMoves++;
 
-								pDoc->cell[j][i] += pDoc->cell[j][k];
-								pDoc->points += pDoc->cell[j][i];
-								pDoc->cell[j][k] = 0;
+								pDoc->cells.top()[j][i] += pDoc->cells.top()[j][k];
+								pDoc->points += pDoc->cells.top()[j][i];
+								pDoc->cells.top()[j][k] = 0;
 							}
 							break;
 						}
@@ -305,6 +319,7 @@ void CMy2048GameView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	}
 
 	if (numMoves) pDoc->GenerateNewRandomCell();
+	else pDoc->cells.pop();
 
 	Invalidate();
 
@@ -319,6 +334,24 @@ void CMy2048GameView::OnLButtonDown(UINT nFlags, CPoint point)
 	if (m_menuBtn->PtInRect(point))
 		((CMainFrame*)AfxGetMainWnd())->ShowPreview();
 	else if (m_undoBtn->PtInRect(point)) {
-		// show about
+		CMy2048GameDoc* pDoc = GetDocument();
+
+		pDoc->cells.pop();
+		Invalidate();
 	}
+}
+
+
+void CMy2048GameView::CreateUndoString(CString* input)
+{
+	CMy2048GameDoc* pDoc = GetDocument();
+
+	CString undoBtnText, 
+			undoCount;
+
+	undoBtnText.LoadStringW(IDS_UNDO);
+	undoCount.Format(L"(%d)", pDoc->cells.size() - 1);
+	undoBtnText += undoCount;
+
+	input->SetString(undoBtnText);
 }

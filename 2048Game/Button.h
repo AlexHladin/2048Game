@@ -22,5 +22,6 @@ public:
 	void OnDraw(CDC* pDC);
 
 	void SetPenPropertiest(int penStyle, int width, COLORREF color);
+	CString* GetTextPtr();
 };
 

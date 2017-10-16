@@ -84,6 +84,7 @@ public:
 		}
 	};
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	void CreateUndoString(CString* input);
 };
 
 #ifndef _DEBUG  // debug version in 2048GameView.cpp

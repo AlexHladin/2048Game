@@ -7,11 +7,16 @@
 #include <propkey.h>
 #include <iostream>
 #include <set>
+#include <stack>
 #include <vector>
 
 #include "FontFactory.h"
 
 #pragma once
+
+using std::stack;
+using std::vector;
+using std::pair;
 
 class CMy2048GameDoc : public CDocument
 {
@@ -25,7 +30,7 @@ public:
 	CString name;
 	int points;
 	int size;
-	int** cell;
+	stack<int**> cells;
 
 	COLORREF bkColor;
 	bool start;

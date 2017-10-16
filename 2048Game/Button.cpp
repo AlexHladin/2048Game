@@ -50,3 +50,8 @@ void Button::SetPenPropertiest(int penStyle, int width, COLORREF color)
 
 	this->m_pen.CreatePen(penStyle, width, color);
 }
+
+CString* Button::GetTextPtr()
+{
+	return &m_text;
+}
