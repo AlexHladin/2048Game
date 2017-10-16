@@ -83,6 +83,6 @@ void PreviewView::OnLButtonDown(UINT nFlags, CPoint point)
 	if (m_startButton->PtInRect(point))
 		((CMainFrame*)AfxGetMainWnd())->StartGame();
 	else if (m_aboutButton->PtInRect(point)) {
-		// show about
+		((CMy2048GameApp*)AfxGetApp())->OnAppAbout();
 	}
 }
