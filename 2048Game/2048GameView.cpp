@@ -56,6 +56,8 @@ void CMy2048GameView::OnInitialUpdate()
 		&GetDocument()->points, 
 		CPoint(), 
 		CSize()));
+
+	SetFocus();
 }
 
 
@@ -73,11 +75,8 @@ void CMy2048GameView::OnDraw(CDC* pDC)
 	float size = (min(rect.Width(), rect.Height() - m_pointsContainer->GetHeight() - 10)) / pDoc->size;
 	float x = 0, y = 0, offset = .05f * size;
 
-	m_menuBtn->position.SetPoint(rect.Width() * .68, offset);
 	m_menuBtn->size.SetSize(rect.Width() * .3, rect.Height() * .06);
-	
 	CreateUndoString(m_undoBtn->GetTextPtr());
-	m_undoBtn->position.SetPoint(rect.Width() * .68, offset + rect.Height() * .08);
 	m_undoBtn->size.SetSize(rect.Width() * .3, rect.Height() * .06);
 
 	m_pointsContainer->position.SetPoint(offset, offset);
@@ -164,6 +163,9 @@ void CMy2048GameView::OnDraw(CDC* pDC)
 		m_pointsContainer->OnDraw(pDC);
 
 		pDC->SelectObject(font_st);
+
+		m_menuBtn->position.SetPoint(size * pDoc->size - m_menuBtn->size.cx, offset);
+		m_undoBtn->position.SetPoint(size * pDoc->size - m_undoBtn->size.cx, offset + rect.Height() * .08);
 
 		m_menuBtn->OnDraw(pDC);
 		m_undoBtn->OnDraw(pDC);
